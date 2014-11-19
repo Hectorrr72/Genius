@@ -8,7 +8,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 @Generated("org.jsonschema2pojo")
-public class Result {
+public class JSONResult {
 
     @Expose
     private String title;
@@ -20,7 +20,7 @@ public class Result {
     private Integer pyongsCount;
     @SerializedName("primary_artist")
     @Expose
-    private PrimaryArtist primaryArtist;
+    private JSONPrimaryArtist JSONPrimaryArtist;
     @SerializedName("updated_by_human_at")
     @Expose
     private Integer updatedByHumanAt;
@@ -89,17 +89,17 @@ public class Result {
      * @return
      *     The primaryArtist
      */
-    public PrimaryArtist getPrimaryArtist() {
-        return primaryArtist;
+    public JSONPrimaryArtist getJSONPrimaryArtist() {
+        return JSONPrimaryArtist;
     }
 
     /**
      *
-     * @param primaryArtist
+     * @param JSONPrimaryArtist
      *     The primary_artist
      */
-    public void setPrimaryArtist(PrimaryArtist primaryArtist) {
-        this.primaryArtist = primaryArtist;
+    public void setJSONPrimaryArtist(JSONPrimaryArtist JSONPrimaryArtist) {
+        this.JSONPrimaryArtist = JSONPrimaryArtist;
     }
 
     /**

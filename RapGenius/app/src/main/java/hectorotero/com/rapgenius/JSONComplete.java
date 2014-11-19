@@ -7,29 +7,29 @@ import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
 
 @Generated("org.jsonschema2pojo")
-public class CompleteJSON {
+public class JSONComplete {
 
     @Expose
-    private Response response;
+    private JSONResponse JSONResponse;
     @Expose
-    private Meta meta;
+    private JSONMeta JSONMeta;
 
     /**
      *
      * @return
      *     The response
      */
-    public Response getResponse() {
-        return response;
+    public JSONResponse getJSONResponse() {
+        return JSONResponse;
     }
 
     /**
      *
-     * @param response
+     * @param JSONResponse
      *     The response
      */
-    public void setResponse(Response response) {
-        this.response = response;
+    public void setJSONResponse(JSONResponse JSONResponse) {
+        this.JSONResponse = JSONResponse;
     }
 
     /**
@@ -37,17 +37,17 @@ public class CompleteJSON {
      * @return
      *     The meta
      */
-    public Meta getMeta() {
-        return meta;
+    public JSONMeta getJSONMeta() {
+        return JSONMeta;
     }
 
     /**
      *
-     * @param meta
+     * @param JSONMeta
      *     The meta
      */
-    public void setMeta(Meta meta) {
-        this.meta = meta;
+    public void setJSONMeta(JSONMeta JSONMeta) {
+        this.JSONMeta = JSONMeta;
     }
 
 }

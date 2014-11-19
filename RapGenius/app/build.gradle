@@ -26,4 +26,6 @@ dependencies {
     compile 'com.google.code.gson:gson:2.3'
     compile 'com.koushikdutta.ion:ion:2.0.0'
     compile 'com.koushikdutta.async:androidasync:2.0.0'
+    compile 'com.android.support:support-v13:21.0.0'
+
 }

@@ -8,7 +8,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 @Generated("org.jsonschema2pojo")
-public class PrimaryArtist {
+public class JSONPrimaryArtist {
 
     @Expose
     private String url;

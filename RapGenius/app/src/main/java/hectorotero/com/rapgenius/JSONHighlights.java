@@ -6,7 +6,7 @@ package hectorotero.com.rapgenius;
 import javax.annotation.Generated;
 
 @Generated("org.jsonschema2pojo")
-public class Highlights {
+public class JSONHighlights {
 
 
 }

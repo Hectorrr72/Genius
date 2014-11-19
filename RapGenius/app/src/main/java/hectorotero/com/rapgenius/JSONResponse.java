@@ -9,27 +9,27 @@ import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
 
 @Generated("org.jsonschema2pojo")
-public class Response {
+public class JSONResponse {
 
     @Expose
-    private List<Hit> hits = new ArrayList<Hit>();
+    private List<JSONHit> JSONHits = new ArrayList<JSONHit>();
 
     /**
      *
      * @return
      *     The hits
      */
-    public List<Hit> getHits() {
-        return hits;
+    public List<JSONHit> getJSONHits() {
+        return JSONHits;
     }
 
     /**
      *
-     * @param hits
+     * @param JSONHits
      *     The hits
      */
-    public void setHits(List<Hit> hits) {
-        this.hits = hits;
+    public void setJSONHits(List<JSONHit> JSONHits) {
+        this.JSONHits = JSONHits;
     }
 
 }

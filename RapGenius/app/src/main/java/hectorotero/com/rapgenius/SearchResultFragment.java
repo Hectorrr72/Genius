@@ -25,7 +25,6 @@ public class SearchResultFragment extends Fragment {
     MyBaseAdapter myBaseAdapter;
     String baseURL = "http://genius.com/";
     String lyricsURL = "-lyrics";
-    LyricsView lyricsView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,14 +43,7 @@ public class SearchResultFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 String middleURL = getProperURL(searchResult.get(position));
-                Bundle args = new Bundle();
-                args.putString("URL", baseURL+middleURL+lyricsURL);
-                Log.v("URL", baseURL+middleURL+lyricsURL);
-                lyricsView = new LyricsView();
-                lyricsView.setArguments(args);
-
-
-                getFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.main_layout, lyricsView).commit();
+                ((OnItemSelected) getActivity()).onItemSelection(baseURL+middleURL+lyricsURL);
 
             }
         });
@@ -60,62 +52,12 @@ public class SearchResultFragment extends Fragment {
 
     }
 
-    String getProperURL(String malformedURL){
+    String getProperURL(String malformedURL) {
 
-       malformedURL = malformedURL.replace(" ", "-").replace("'","").replace("’","").replace(".","").replace(":","")
-               .replace("á","a").replace("é","e").replace("í","i").replace("ó","o").replace("ú","u");
-       return malformedURL;
-    }
-
-private class MyBaseAdapter extends BaseAdapter {
-
-    ArrayList<String> list;
-    Context context;
-
-    private MyBaseAdapter(Context context, ArrayList<String> list) {
-        super();
-        this.list = list;
-        this.context = context;
-
-    }
-
-    @Override
-    public int getCount() {
-        return list.size();
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        if (convertView == null) {
-
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-            convertView = inflater.inflate(R.layout.single_item, parent, false);
-
-        }
-
-        TextView singleName = (TextView) convertView.findViewById(R.id.itemTextView);
-
-        singleName.setText(list.get(position));
-
-        return convertView;
-
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return list.get(position);
+        malformedURL = malformedURL.replace(" ", "-").replace("'", "").replace("’", "").replace(".", "").replace(":", "")
+                .replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u");
+        return malformedURL;
     }
 
 }
-
-
-}
-
 
