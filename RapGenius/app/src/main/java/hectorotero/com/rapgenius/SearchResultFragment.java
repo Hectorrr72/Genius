@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -21,6 +23,9 @@ public class SearchResultFragment extends Fragment {
     ListView listView;
     ArrayList<String> searchResult;
     MyBaseAdapter myBaseAdapter;
+    String baseURL = "http://genius.com/";
+    String lyricsURL = "-lyrics";
+    LyricsView lyricsView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -34,8 +39,32 @@ public class SearchResultFragment extends Fragment {
         myBaseAdapter = new MyBaseAdapter(this.getActivity(), searchResult);
         listView.setAdapter(myBaseAdapter);
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                String middleURL = getProperURL(searchResult.get(position));
+                Bundle args = new Bundle();
+                args.putString("URL", baseURL+middleURL+lyricsURL);
+                Log.v("URL", baseURL+middleURL+lyricsURL);
+                lyricsView = new LyricsView();
+                lyricsView.setArguments(args);
+
+
+                getFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.main_layout, lyricsView).commit();
+
+            }
+        });
+
         return view;
 
+    }
+
+    String getProperURL(String malformedURL){
+
+       malformedURL = malformedURL.replace(" ", "-").replace("'","").replace("’","").replace(".","").replace(":","")
+               .replace("á","a").replace("é","e").replace("í","i").replace("ó","o").replace("ú","u");
+       return malformedURL;
     }
 
 private class MyBaseAdapter extends BaseAdapter {
