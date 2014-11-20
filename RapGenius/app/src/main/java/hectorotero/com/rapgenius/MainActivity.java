@@ -2,6 +2,7 @@ package hectorotero.com.rapgenius;
 
 
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -23,6 +24,7 @@ public class MainActivity extends FragmentActivity implements OnSearchPerformed,
     LyricsView lyricsView;
     ViewPager myViewPager;
     MyPagerAdapter myPagerAdapter;
+    ArrayList<Fragment> fragmentArrayList = new ArrayList<Fragment>();
 
     final String URL_BEGINNING = "http://api.genius.com/search?q=";
     JSONComplete JSONComplete;
@@ -38,13 +40,12 @@ public class MainActivity extends FragmentActivity implements OnSearchPerformed,
         setContentView(R.layout.activity_main);
 
         myViewPager = (ViewPager) findViewById(R.id.pager);
-        myPagerAdapter = new MyPagerAdapter(getFragmentManager());
 
         searchFragment = new SearchFragment();
-        myPagerAdapter.getFragmentArrayList().add(searchFragment);
-        myPagerAdapter.notifyDataSetChanged();
+        fragmentArrayList.add(searchFragment);
+        myPagerAdapter = new MyPagerAdapter(getFragmentManager(), fragmentArrayList);
+
         myViewPager.setAdapter(myPagerAdapter);
-        myViewPager.setCurrentItem(0);
 
     }
 
@@ -93,12 +94,12 @@ public class MainActivity extends FragmentActivity implements OnSearchPerformed,
                     searchResultFragment = new SearchResultFragment();
                     searchResultFragment.setArguments(args);
                     if (myPagerAdapter.getFragmentArrayList().size() < 2) {
-                        myPagerAdapter.getFragmentArrayList().add(searchResultFragment);
+                        myPagerAdapter.addFragment(searchResultFragment);
 
                     } else {
-                        myPagerAdapter.getFragmentArrayList().set(1, searchResultFragment);
+                        myPagerAdapter.replaceFragment(1, searchResultFragment);
                     }
-                    myPagerAdapter.notifyDataSetChanged();
+
                     myViewPager.setCurrentItem(1);
 
                 }
@@ -118,13 +119,13 @@ public class MainActivity extends FragmentActivity implements OnSearchPerformed,
         lyricsView.setArguments(bundle);
 
         if (myPagerAdapter.getFragmentArrayList().size()<3){
-            myPagerAdapter.getFragmentArrayList().add(lyricsView);
+            myPagerAdapter.addFragment(lyricsView);
 
         }else{
-            myPagerAdapter.getFragmentArrayList().set(2, lyricsView);
+            myPagerAdapter.replaceFragment(2, lyricsView);
         }
-        myPagerAdapter.notifyDataSetChanged();
         myViewPager.setCurrentItem(2);
+
 
     }
 

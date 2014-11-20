@@ -12,7 +12,7 @@ import com.google.gson.annotations.Expose;
 public class JSONResponse {
 
     @Expose
-    private List<JSONHit> JSONHits = new ArrayList<JSONHit>();
+    private List<JSONHit> Hits = new ArrayList<JSONHit>();
 
     /**
      *
@@ -20,7 +20,7 @@ public class JSONResponse {
      *     The hits
      */
     public List<JSONHit> getJSONHits() {
-        return JSONHits;
+        return Hits;
     }
 
     /**
@@ -29,7 +29,7 @@ public class JSONResponse {
      *     The hits
      */
     public void setJSONHits(List<JSONHit> JSONHits) {
-        this.JSONHits = JSONHits;
+        this.Hits = Hits;
     }
 
 }

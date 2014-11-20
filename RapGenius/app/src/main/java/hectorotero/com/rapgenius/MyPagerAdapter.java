@@ -13,10 +13,12 @@ import java.util.ArrayList;
 public class MyPagerAdapter extends FragmentPagerAdapter {
 
 
-    ArrayList<Fragment> fragmentArrayList = new ArrayList<Fragment>();
+    ArrayList<Fragment> fragmentArrayList;
 
-    public MyPagerAdapter(FragmentManager fm) {
+    public MyPagerAdapter(FragmentManager fm, ArrayList<Fragment> fragmentArrayList) {
+
         super(fm);
+        this.fragmentArrayList = fragmentArrayList;
     }
 
     @Override
@@ -45,6 +47,15 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
     public void replaceFragment(int index, Fragment fragment){
 
         fragmentArrayList.set(index, fragment);
+        this.notifyDataSetChanged();
+
+    }
+
+
+    public void addFragment(Fragment fragment){
+
+        fragmentArrayList.add(fragment);
+        this.notifyDataSetChanged();
 
     }
 
