@@ -41,9 +41,9 @@ public class MainActivity extends FragmentActivity implements OnSearchPerformed,
         myPagerAdapter = new MyPagerAdapter(getFragmentManager());
 
         searchFragment = new SearchFragment();
-        myViewPager.setAdapter(myPagerAdapter);
         myPagerAdapter.getFragmentArrayList().add(searchFragment);
         myPagerAdapter.notifyDataSetChanged();
+        myViewPager.setAdapter(myPagerAdapter);
         myViewPager.setCurrentItem(0);
 
     }
