@@ -1,4 +1,4 @@
-package hectorotero.com.rapgenius;
+package hectorotero.com.rapgenius.JsonRelated;
 
 /**
  * Created by hectoroteromediero on 04/11/14.
@@ -8,28 +8,30 @@ import java.util.List;
 import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
 
+import hectorotero.com.rapgenius.JsonRelated.Hit;
+
 @Generated("org.jsonschema2pojo")
-public class JSONResponse {
+public class Response {
 
     @Expose
-    private List<JSONHit> Hits = new ArrayList<JSONHit>();
+    private List<Hit> hits = new ArrayList<Hit>();
 
     /**
      *
      * @return
      *     The hits
      */
-    public List<JSONHit> getJSONHits() {
-        return Hits;
+    public List<Hit> getHits() {
+        return hits;
     }
 
     /**
      *
-     * @param JSONHits
+     * @param hits
      *     The hits
      */
-    public void setJSONHits(List<JSONHit> JSONHits) {
-        this.Hits = Hits;
+    public void setHits(List<Hit> hits) {
+        this.hits = hits;
     }
 
 }

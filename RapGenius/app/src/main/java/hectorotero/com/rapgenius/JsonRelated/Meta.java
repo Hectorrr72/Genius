@@ -1,4 +1,4 @@
-package hectorotero.com.rapgenius;
+package hectorotero.com.rapgenius.JsonRelated;
 
 /**
  * Created by hectoroteromediero on 04/11/14.
@@ -7,7 +7,7 @@ import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
 
 @Generated("org.jsonschema2pojo")
-public class JSONMeta {
+public class Meta {
 
     @Expose
     private Integer status;

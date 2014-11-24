@@ -1,4 +1,4 @@
-package hectorotero.com.rapgenius;
+package hectorotero.com.rapgenius.JsonRelated;
 
 /**
  * Created by hectoroteromediero on 04/11/14.
@@ -7,8 +7,10 @@ import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import hectorotero.com.rapgenius.JsonRelated.PrimaryArtist;
+
 @Generated("org.jsonschema2pojo")
-public class JSONResult {
+public class Result {
 
     @Expose
     private String title;
@@ -20,7 +22,7 @@ public class JSONResult {
     private Integer pyongsCount;
     @SerializedName("primary_artist")
     @Expose
-    private JSONPrimaryArtist JSONPrimaryArtist;
+    private PrimaryArtist primaryArtist;
     @SerializedName("updated_by_human_at")
     @Expose
     private Integer updatedByHumanAt;
@@ -89,17 +91,17 @@ public class JSONResult {
      * @return
      *     The primaryArtist
      */
-    public JSONPrimaryArtist getJSONPrimaryArtist() {
-        return JSONPrimaryArtist;
+    public PrimaryArtist getPrimaryArtist() {
+        return primaryArtist;
     }
 
     /**
      *
-     * @param JSONPrimaryArtist
+     * @param primaryArtist
      *     The primary_artist
      */
-    public void setJSONPrimaryArtist(JSONPrimaryArtist JSONPrimaryArtist) {
-        this.JSONPrimaryArtist = JSONPrimaryArtist;
+    public void setPrimaryArtist(PrimaryArtist primaryArtist) {
+        this.primaryArtist = primaryArtist;
     }
 
     /**

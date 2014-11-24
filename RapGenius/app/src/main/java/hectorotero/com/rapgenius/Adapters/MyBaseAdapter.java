@@ -1,4 +1,4 @@
-package hectorotero.com.rapgenius;
+package hectorotero.com.rapgenius.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,11 +9,14 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import hectorotero.com.rapgenius.R;
+
 /**
  * Created by hectoroteromediero on 19/11/14.
  */
 
 public class MyBaseAdapter extends BaseAdapter {
+
 
     ArrayList<String> list;
     Context context;
@@ -47,6 +50,10 @@ public class MyBaseAdapter extends BaseAdapter {
 
         return convertView;
 
+    }
+
+    public void setList(ArrayList<String> list) {
+        this.list = list;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package hectorotero.com.rapgenius;
+package hectorotero.com.rapgenius.JsonRelated;
 
 /**
  * Created by hectoroteromediero on 04/11/14.
@@ -6,7 +6,7 @@ package hectorotero.com.rapgenius;
 import javax.annotation.Generated;
 
 @Generated("org.jsonschema2pojo")
-public class JSONHighlights {
+public class Highlights {
 
 
 }

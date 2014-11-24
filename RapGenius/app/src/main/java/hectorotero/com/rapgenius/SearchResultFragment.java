@@ -1,19 +1,17 @@
 package hectorotero.com.rapgenius;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
+
+import hectorotero.com.rapgenius.Adapters.MyBaseAdapter;
+import hectorotero.com.rapgenius.Interfaces.OnItemSelected;
 
 /**
  * Created by hectoroteromediero on 05/11/14.
@@ -25,6 +23,10 @@ public class SearchResultFragment extends Fragment {
     MyBaseAdapter myBaseAdapter;
     String baseURL = "http://genius.com/";
     String lyricsURL = "-lyrics";
+    OnItemSelected onItemSelected;
+    String middleURL;
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,8 +44,8 @@ public class SearchResultFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                String middleURL = getProperURL(searchResult.get(position));
-                ((OnItemSelected) getActivity()).onItemSelection(baseURL+middleURL+lyricsURL);
+                middleURL = getProperURL(searchResult.get(position));
+                onItemSelected.onItemSelection(baseURL + middleURL + lyricsURL);
 
             }
         });
@@ -58,6 +60,22 @@ public class SearchResultFragment extends Fragment {
                 .replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u");
         return malformedURL;
     }
+
+
+    public void setOnItemSelected(OnItemSelected onItemSelected) {
+        this.onItemSelected = onItemSelected;
+    }
+
+    public void changeListDisplayed(ArrayList<String> newList){
+
+        searchResult = newList;
+        myBaseAdapter.setList(newList);
+        myBaseAdapter.notifyDataSetChanged();
+
+
+    }
+
+
 
 }
 

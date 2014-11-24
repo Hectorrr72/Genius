@@ -1,9 +1,10 @@
-package hectorotero.com.rapgenius;
+package hectorotero.com.rapgenius.Adapters;
 
 
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.support.v13.app.FragmentPagerAdapter;
+import android.support.v13.app.FragmentStatePagerAdapter;
 
 import java.util.ArrayList;
 
@@ -28,7 +29,6 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-
         return fragmentArrayList.size();
     }
 
@@ -36,21 +36,23 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
 
         return String.valueOf(position);
+    }
 
+    @Override
+    public int getItemPosition(Object object) {
+
+        return super.getItemPosition(object);
     }
 
     public ArrayList<Fragment> getFragmentArrayList() {
         return fragmentArrayList;
     }
 
-
     public void replaceFragment(int index, Fragment fragment){
-
         fragmentArrayList.set(index, fragment);
         this.notifyDataSetChanged();
 
     }
-
 
     public void addFragment(Fragment fragment){
 
@@ -58,5 +60,7 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
         this.notifyDataSetChanged();
 
     }
+
+
 
 }

@@ -1,4 +1,4 @@
-package hectorotero.com.rapgenius;
+package hectorotero.com.rapgenius.JsonRelated;
 
 /**
  * Created by hectoroteromediero on 04/11/14.
@@ -8,7 +8,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 @Generated("org.jsonschema2pojo")
-public class JSONPrimaryArtist {
+public class PrimaryArtist {
 
     @Expose
     private String url;
