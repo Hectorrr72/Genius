@@ -1,4 +1,4 @@
-package hectorotero.com.rapgenius;
+package hectorotero.com.rapgenius.Activities;
 
 
 
@@ -18,31 +18,40 @@ import com.koushikdutta.ion.Ion;
 import java.util.ArrayList;
 
 import hectorotero.com.rapgenius.Adapters.MyPagerAdapter;
+import hectorotero.com.rapgenius.Fragments.ExplanationFragment;
+import hectorotero.com.rapgenius.Interfaces.OnExplanationAsked;
 import hectorotero.com.rapgenius.Interfaces.OnItemSelected;
 import hectorotero.com.rapgenius.Interfaces.OnSearchPerformed;
 import hectorotero.com.rapgenius.JsonRelated.CompleteJSON;
 import hectorotero.com.rapgenius.JsonRelated.Hit;
 import hectorotero.com.rapgenius.JsonRelated.Response;
+import hectorotero.com.rapgenius.Fragments.LyricsFragment;
+import hectorotero.com.rapgenius.R;
+import hectorotero.com.rapgenius.Fragments.SearchBoxFragment;
+import hectorotero.com.rapgenius.Fragments.SearchResultListFragment;
 
 
-public class MainActivity extends FragmentActivity implements OnSearchPerformed, OnItemSelected {
+public class MainActivity extends FragmentActivity implements OnSearchPerformed, OnItemSelected, OnExplanationAsked {
 
-    SearchFragment searchFragment;
-    SearchResultFragment searchResultFragment;
-    LyricsView lyricsView;
+    SearchBoxFragment searchBoxFragment;
+    SearchResultListFragment searchResultListFragment;
+    LyricsFragment lyricsFragment;
+    ExplanationFragment explanationFragment;
+
     ViewPager myViewPager;
     MyPagerAdapter myPagerAdapter;
     ArrayList<Fragment> fragmentArrayList = new ArrayList<Fragment>();
 
     final String URL_BEGINNING = "http://api.genius.com/search?q=";
     CompleteJSON JSONComplete;
-    ArrayList<Hit> hitsArrayList = new ArrayList<Hit>();
+    ArrayList<Hit> hitsArrayList = new ArrayList<>();
     ArrayList<String> resultArrayList;
     Gson gson;
     String completeURL;
     Response response;
 
     OnItemSelected onItemSelected;
+    OnExplanationAsked onExplanationAsked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +60,11 @@ public class MainActivity extends FragmentActivity implements OnSearchPerformed,
 
         myViewPager = (ViewPager) findViewById(R.id.pager);
         onItemSelected = this;
+        onExplanationAsked = this;
 
-        searchFragment = new SearchFragment();
-        searchFragment.setOnSearchPerformed(this);
-        fragmentArrayList.add(searchFragment);
+        searchBoxFragment = new SearchBoxFragment();
+        searchBoxFragment.setOnSearchPerformed(this);
+        fragmentArrayList.add(searchBoxFragment);
         myPagerAdapter = new MyPagerAdapter(getFragmentManager(), fragmentArrayList);
 
         myViewPager.setAdapter(myPagerAdapter);
@@ -92,7 +102,7 @@ public class MainActivity extends FragmentActivity implements OnSearchPerformed,
                 if (response != null) {
 
                     hitsArrayList = (ArrayList<Hit>) response.getHits();
-                    resultArrayList = new ArrayList<String>();
+                    resultArrayList = new ArrayList<>();
 
                     for (int i = 0; i < hitsArrayList.size(); i++) {
 
@@ -106,18 +116,16 @@ public class MainActivity extends FragmentActivity implements OnSearchPerformed,
                         Bundle args = new Bundle();
                         args.putStringArrayList("responseArrayList", resultArrayList);
 
-                        searchResultFragment = new SearchResultFragment();
-                        searchResultFragment.setArguments(args);
-                        searchResultFragment.setOnItemSelected(onItemSelected);
-                        myPagerAdapter.addFragment(searchResultFragment);
+                        searchResultListFragment = new SearchResultListFragment();
+                        searchResultListFragment.setArguments(args);
+                        searchResultListFragment.setOnItemSelected(onItemSelected);
+                        myPagerAdapter.addFragment(searchResultListFragment);
 
                     }else{
 
-                        searchResultFragment.changeListDisplayed(resultArrayList);
+                        searchResultListFragment.changeListDisplayed(resultArrayList);
 
                     }
-
-
                     myViewPager.setCurrentItem(1);
 
                 }
@@ -129,22 +137,43 @@ public class MainActivity extends FragmentActivity implements OnSearchPerformed,
     }
 
     @Override
-    public void onItemSelection(String URL) {
+    public void onItemSelection(String URL, int positionClicked) {
 
         if (fragmentArrayList.size() < 3){
-            lyricsView = new LyricsView();
+            lyricsFragment = new LyricsFragment();
+            lyricsFragment.setOnExplanationAsked(onExplanationAsked);
             Bundle bundle = new Bundle();
             bundle.putString("URL", URL);
-            lyricsView.setArguments(bundle);
-            myPagerAdapter.addFragment(lyricsView);
+            lyricsFragment.setArguments(bundle);
+            myPagerAdapter.addFragment(lyricsFragment);
 
         }else{
-            lyricsView.setNewURL(URL);
 
+            if(!lyricsFragment.getURL().equals(URL))
+                lyricsFragment.setNewURL(URL);
         }
         myViewPager.setCurrentItem(2);
 
 
     }
 
+    @Override
+    public void onLyricsExplanationRequired(String URL) {
+
+        if (fragmentArrayList.size()<4){
+            explanationFragment = new ExplanationFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("URL", URL);
+            explanationFragment.setArguments(bundle);
+            myPagerAdapter.addFragment(explanationFragment);
+
+        }else{
+
+            if(!explanationFragment.getURL().equals(URL))
+                explanationFragment.setNewURL(URL);
+        }
+
+        myViewPager.setCurrentItem(3);
+
+    }
 }

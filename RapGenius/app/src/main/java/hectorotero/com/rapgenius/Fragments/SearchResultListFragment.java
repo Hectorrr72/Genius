@@ -1,7 +1,8 @@
-package hectorotero.com.rapgenius;
+package hectorotero.com.rapgenius.Fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +13,12 @@ import java.util.ArrayList;
 
 import hectorotero.com.rapgenius.Adapters.MyBaseAdapter;
 import hectorotero.com.rapgenius.Interfaces.OnItemSelected;
+import hectorotero.com.rapgenius.R;
 
 /**
  * Created by hectoroteromediero on 05/11/14.
  */
-public class SearchResultFragment extends Fragment {
+public class SearchResultListFragment extends Fragment {
 
     ListView listView;
     ArrayList<String> searchResult;
@@ -45,7 +47,7 @@ public class SearchResultFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 middleURL = getProperURL(searchResult.get(position));
-                onItemSelected.onItemSelection(baseURL + middleURL + lyricsURL);
+                onItemSelected.onItemSelection(baseURL + middleURL + lyricsURL, position);
 
             }
         });
@@ -56,8 +58,11 @@ public class SearchResultFragment extends Fragment {
 
     String getProperURL(String malformedURL) {
 
-        malformedURL = malformedURL.replace(" ", "-").replace("'", "").replace("’", "").replace(".", "").replace(":", "")
-                .replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u");
+        malformedURL = malformedURL.replace(" ", "-").replace("'", "").replace("’", "").replace(".", "").replace(":", "-")
+                .replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u").replace("?","")
+                .replace("(","").replace(")","");
+
+
         return malformedURL;
     }
 
@@ -71,7 +76,6 @@ public class SearchResultFragment extends Fragment {
         searchResult = newList;
         myBaseAdapter.setList(newList);
         myBaseAdapter.notifyDataSetChanged();
-
 
     }
 
