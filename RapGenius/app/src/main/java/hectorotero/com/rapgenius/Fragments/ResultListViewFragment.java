@@ -2,7 +2,6 @@ package hectorotero.com.rapgenius.Fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,43 +10,43 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-import hectorotero.com.rapgenius.Adapters.MyBaseAdapter;
+import hectorotero.com.rapgenius.Adapters.MyListViewAdapter;
 import hectorotero.com.rapgenius.Interfaces.OnItemSelected;
 import hectorotero.com.rapgenius.R;
 
 /**
  * Created by hectoroteromediero on 05/11/14.
  */
-public class SearchResultListFragment extends Fragment {
+public class ResultListViewFragment extends Fragment {
 
     ListView listView;
-    ArrayList<String> searchResult;
-    MyBaseAdapter myBaseAdapter;
+    ArrayList<String> titlesArrayList;
+    ArrayList<String> artistsArrayList;
+    MyListViewAdapter myListViewAdapter;
     String baseURL = "http://genius.com/";
     String lyricsURL = "-lyrics";
     OnItemSelected onItemSelected;
     String middleURL;
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.search_result_fragment, container, false);
+        View view = inflater.inflate(R.layout.result_list_view_fragment, container, false);
         listView = (ListView) view.findViewById(R.id.listView);
 
         Bundle bundle = getArguments();
-        searchResult = bundle.getStringArrayList("responseArrayList");
+        titlesArrayList = bundle.getStringArrayList("titlesArrayList");
+        artistsArrayList = bundle.getStringArrayList("artistsArrayList");
 
-        myBaseAdapter = new MyBaseAdapter(this.getActivity(), searchResult);
-        listView.setAdapter(myBaseAdapter);
+        myListViewAdapter = new MyListViewAdapter(this.getActivity(), titlesArrayList, artistsArrayList);
+        listView.setAdapter(myListViewAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                middleURL = getProperURL(searchResult.get(position));
-                onItemSelected.onItemSelection(baseURL + middleURL + lyricsURL, position);
+                middleURL = getProperURL(artistsArrayList.get(position)+"-"+titlesArrayList.get(position));
+                onItemSelected.onItemSelection(baseURL + middleURL + lyricsURL, titlesArrayList.get(position), artistsArrayList.get(position));
 
             }
         });
@@ -71,11 +70,13 @@ public class SearchResultListFragment extends Fragment {
         this.onItemSelected = onItemSelected;
     }
 
-    public void changeListDisplayed(ArrayList<String> newList){
+    public void changeListDisplayed(ArrayList<String> titlesNewList, ArrayList<String> artistsNewList){
 
-        searchResult = newList;
-        myBaseAdapter.setList(newList);
-        myBaseAdapter.notifyDataSetChanged();
+        titlesArrayList = titlesNewList;
+        artistsArrayList = artistsNewList;
+
+        myListViewAdapter.setList(titlesNewList,artistsNewList);
+        myListViewAdapter.notifyDataSetChanged();
 
     }
 

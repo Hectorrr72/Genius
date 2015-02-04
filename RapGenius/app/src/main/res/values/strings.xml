@@ -5,5 +5,12 @@
     <string name="action_settings">Settings</string>
     <string name="search_bar_hint_text">Introduce song or artist name</string>
     <string name="searchButtonText">SEARCH</string>
+    <string name="from_html_text"><![CDATA[
+<h1>Hello World</h1>
+Here is an <img src="octopus"><i>octopus</i>.<br>
+And here is a
+<a href="http://d.android.com/reference/android/text/Html.html">
+link</a>.]]>
+</string>
 
 </resources>

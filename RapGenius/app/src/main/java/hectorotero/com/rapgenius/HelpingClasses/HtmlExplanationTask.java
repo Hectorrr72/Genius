@@ -7,10 +7,13 @@ import com.telly.groundy.TaskResult;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+
+import hectorotero.com.rapgenius.R;
 
 /**
  * Created by hectoroteromediero on 23/12/14.
@@ -32,13 +35,13 @@ public class HtmlExplanationTask extends GroundyTask{
 
             document.outputSettings(new Document.OutputSettings().prettyPrint(false));
 
-            text = document.select("meta[property=og:description]").get(0).attr("content");
+            text = document.select("p").toString();
 
-            images = document.select("img[src~=(?i)\\.(png|jpe?g|gif)]");
-
-            text += " " + images.attr("src");
+            Log.v("TEXT", text);
 
             return succeeded().add("Explanation", text);
+
+
 
         } catch (IOException e) {
             e.printStackTrace();

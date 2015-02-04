@@ -15,22 +15,26 @@ import hectorotero.com.rapgenius.R;
  * Created by hectoroteromediero on 19/11/14.
  */
 
-public class MyBaseAdapter extends BaseAdapter {
+public class MyListViewAdapter extends BaseAdapter {
 
 
-    ArrayList<String> list;
+    ArrayList<String> artistsList;
+    ArrayList<String> titlesList;
     Context context;
+    TextView titleName;
+    TextView artistName;
 
-    public MyBaseAdapter(Context context, ArrayList<String> list) {
+    public MyListViewAdapter(Context context, ArrayList<String> titlesList, ArrayList<String> artistsList) {
         super();
-        this.list = list;
+        this.titlesList = titlesList;
+        this.artistsList = artistsList;
         this.context = context;
 
     }
 
     @Override
     public int getCount() {
-        return list.size();
+        return titlesList.size();
     }
 
     @Override
@@ -44,16 +48,18 @@ public class MyBaseAdapter extends BaseAdapter {
 
         }
 
-        TextView singleName = (TextView) convertView.findViewById(R.id.itemTextView);
-
-        singleName.setText(list.get(position));
+        titleName = (TextView) convertView.findViewById(R.id.singleTitleTextView);
+        artistName = (TextView) convertView.findViewById(R.id.singleArtistTextView);
+        titleName.setText(titlesList.get(position));
+        artistName.setText(artistsList.get(position));
 
         return convertView;
 
     }
 
-    public void setList(ArrayList<String> list) {
-        this.list = list;
+    public void setList(ArrayList<String> titlesList, ArrayList<String> artistsList) {
+        this.titlesList = titlesList;
+        this.artistsList = artistsList;
     }
 
     @Override
@@ -63,7 +69,7 @@ public class MyBaseAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return list.get(position);
+        return titlesList.get(position) + artistsList.get(position);
     }
 
 }

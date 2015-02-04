@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    >
+    <RelativeLayout
+        android:id="@+id/lyrics_progress_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        >
+
+        <ProgressBar
+
+            android:id="@+id/lyrics_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+
+
+            />
+    </RelativeLayout>
+
+
+    <FrameLayout
+        android:id="@+id/lyrics_relative_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        >
+
+        <ScrollView
+            android:id="@+id/lyrics_scroll_view"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <TextView
+                android:id="@+id/lyrics_text_view"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:fontFamily="sans-serif-condensed-light"
+                android:textColorLink="@color/accent"
+                android:textColor="#FFFF"
+                />
+        </ScrollView>
+
+    </FrameLayout>
+
+
+</LinearLayout>

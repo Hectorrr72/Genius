@@ -2,15 +2,17 @@ package hectorotero.com.rapgenius.Fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.telly.groundy.Groundy;
@@ -18,7 +20,9 @@ import com.telly.groundy.annotations.OnSuccess;
 import com.telly.groundy.annotations.Param;
 
 import hectorotero.com.rapgenius.HelpingClasses.HtmlLyricsTask;
+import hectorotero.com.rapgenius.HelpingClasses.URLImageParser;
 import hectorotero.com.rapgenius.HelpingClasses.URLTextClick;
+import hectorotero.com.rapgenius.Interfaces.BackPressed;
 import hectorotero.com.rapgenius.Interfaces.OnExplanationAsked;
 import hectorotero.com.rapgenius.R;
 
@@ -27,33 +31,44 @@ import hectorotero.com.rapgenius.R;
  */
 public class LyricsFragment extends Fragment {
 
+    TextView artistTextView;
+    TextView titleTextView;
 
-    TextView textView;
-    String URL;
-    View completeView;
+    String titleName;
+    String artistName;
+    String URL = "";
+
+    TextView lyricsTextView;
+    View rootView;
     View progressView;
-    ScrollView wholeTextView;
+    View wholeTextView;
     OnExplanationAsked onExplanationAsked;
+    TextView song_toolbar_tv;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        if (completeView == null) {
+        rootView = inflater.inflate(R.layout.lyrics_fragment, container, false);
 
-            completeView = inflater.inflate(R.layout.base_text_fragment, container, false);
-            progressView = completeView.findViewById(R.id.lyrics_progress_view);
-            wholeTextView = (ScrollView) completeView.findViewById(R.id.lyrics_view);
+        rootView.setTag("LYRICS_TAG");
 
-            textView = (TextView) completeView.findViewById(R.id.lyrics_text_view);
+        progressView = rootView.findViewById(R.id.lyrics_progress_view);
+        wholeTextView = rootView.findViewById(R.id.lyrics_relative_view);
 
-            Bundle data = getArguments();
-            setURL(data.getString("URL"));
+        lyricsTextView = (TextView) rootView.findViewById(R.id.lyrics_text_view);
 
-            Groundy.create(HtmlLyricsTask.class).callback(this).arg("url", getURL()).queueUsing(this.getActivity());
 
-        }
+        Bundle data = getArguments();
+        setTitleName(data.getString("titleName"));
+        setArtistName(data.getString("artistName"));
+        setURL(data.getString("URL"));
 
-        return completeView;
+        song_toolbar_tv = (TextView) getActivity().findViewById(R.id.song_toolbar_title);
+        song_toolbar_tv.setText(titleName+" - "+artistName);
+
+        Groundy.create(HtmlLyricsTask.class).callback(this).arg("url", getURL()).queueUsing(this.getActivity());
+
+        return rootView;
     }
 
     @OnSuccess(HtmlLyricsTask.class)
@@ -62,27 +77,30 @@ public class LyricsFragment extends Fragment {
         progressView.setVisibility(View.GONE);
         wholeTextView.setVisibility(View.VISIBLE);
 
-        textView.setText(Html.fromHtml(html, new ResourceImageGetter(this.getActivity()), null));
-        textView.setMovementMethod(LinkMovementMethod.getInstance());
 
-        CharSequence text = textView.getText();
-        if(text instanceof Spannable){
+        URLImageParser urlImageParser = new URLImageParser(lyricsTextView, this.getActivity());
+        lyricsTextView.setText(Html.fromHtml(html, urlImageParser, null));
+        lyricsTextView.setMovementMethod(LinkMovementMethod.getInstance());
+
+        CharSequence text = lyricsTextView.getText();
+        if (text instanceof Spannable) {
             int end = text.length();
-            Spannable sp = (Spannable)textView.getText();
+            Spannable sp = (Spannable) lyricsTextView.getText();
             URLSpan[] urls = sp.getSpans(0, end, URLSpan.class);
             SpannableStringBuilder style = new SpannableStringBuilder(text);
             style.clearSpans();
-            for(URLSpan url : urls){
+            for (URLSpan url : urls) {
                 URLTextClick click = new URLTextClick(url.getURL(), this);
                 style.setSpan(click, sp.getSpanStart(url), sp.getSpanEnd(url), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
-            textView.setText(style);
+            lyricsTextView.setText(style);
         }
 
     }
 
     public void setNewURL(String URL) {
 
+        progressView = rootView.findViewById(R.id.lyrics_progress_view);
         progressView.setVisibility(View.VISIBLE);
         wholeTextView.setVisibility(View.INVISIBLE);
         wholeTextView.scrollTo(0, 0);
@@ -92,7 +110,7 @@ public class LyricsFragment extends Fragment {
 
     }
 
-    public void receivedAClick(String URL){
+    public void receivedAClick(String URL) {
 
         this.onExplanationAsked.onLyricsExplanationRequired(URL);
 
@@ -109,6 +127,18 @@ public class LyricsFragment extends Fragment {
 
     public void setURL(String URL) {
         this.URL = URL;
+    }
+
+    public void setTitleName(String titleName) {
+
+        this.titleName = titleName;
+    }
+
+    public void setArtistName(String artistName) {
+
+        this.artistName = artistName;
+
+
     }
 
 

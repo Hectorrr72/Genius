@@ -2,13 +2,14 @@ package hectorotero.com.rapgenius.Activities;
 
 
 
-import android.app.Fragment;
-import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 
 import com.google.gson.Gson;
@@ -17,78 +18,68 @@ import com.koushikdutta.ion.Ion;
 
 import java.util.ArrayList;
 
-import hectorotero.com.rapgenius.Adapters.MyPagerAdapter;
-import hectorotero.com.rapgenius.Fragments.ExplanationFragment;
-import hectorotero.com.rapgenius.Interfaces.OnExplanationAsked;
+
+import hectorotero.com.rapgenius.Adapters.MyRecyclerViewAdapter;
+import hectorotero.com.rapgenius.Fragments.ResultRecyclerViewFragment;
 import hectorotero.com.rapgenius.Interfaces.OnItemSelected;
 import hectorotero.com.rapgenius.Interfaces.OnSearchPerformed;
 import hectorotero.com.rapgenius.JsonRelated.CompleteJSON;
 import hectorotero.com.rapgenius.JsonRelated.Hit;
 import hectorotero.com.rapgenius.JsonRelated.Response;
-import hectorotero.com.rapgenius.Fragments.LyricsFragment;
 import hectorotero.com.rapgenius.R;
 import hectorotero.com.rapgenius.Fragments.SearchBoxFragment;
-import hectorotero.com.rapgenius.Fragments.SearchResultListFragment;
 
 
-public class MainActivity extends FragmentActivity implements OnSearchPerformed, OnItemSelected, OnExplanationAsked {
+public class MainActivity extends ActionBarActivity implements OnSearchPerformed, OnItemSelected{
 
     SearchBoxFragment searchBoxFragment;
-    SearchResultListFragment searchResultListFragment;
-    LyricsFragment lyricsFragment;
-    ExplanationFragment explanationFragment;
-
-    ViewPager myViewPager;
-    MyPagerAdapter myPagerAdapter;
-    ArrayList<Fragment> fragmentArrayList = new ArrayList<Fragment>();
+    ResultRecyclerViewFragment resultRecyclerViewFragment;
 
     final String URL_BEGINNING = "http://api.genius.com/search?q=";
     CompleteJSON JSONComplete;
     ArrayList<Hit> hitsArrayList = new ArrayList<>();
-    ArrayList<String> resultArrayList;
+    ArrayList<String> artistsArrayList;
+    ArrayList<String> titlesArrayList;
     Gson gson;
     String completeURL;
     Response response;
 
     OnItemSelected onItemSelected;
-    OnExplanationAsked onExplanationAsked;
+    SongActivity songActivity;
+    MyRecyclerViewAdapter mAdapter;
+
+    Toolbar toolbar;
+    TextView title_text_view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        myViewPager = (ViewPager) findViewById(R.id.pager);
-        onItemSelected = this;
-        onExplanationAsked = this;
+        toolbar = (Toolbar) findViewById(R.id.my_main_toolbar);
+        toolbar.setTitle("");
 
+        title_text_view = (TextView) toolbar.findViewById(R.id.main_toolbar_title);
+
+        setSupportActionBar(toolbar);
+
+        onItemSelected = this;
         searchBoxFragment = new SearchBoxFragment();
         searchBoxFragment.setOnSearchPerformed(this);
-        fragmentArrayList.add(searchBoxFragment);
-        myPagerAdapter = new MyPagerAdapter(getFragmentManager(), fragmentArrayList);
 
-        myViewPager.setAdapter(myPagerAdapter);
-
+        getFragmentManager().beginTransaction().add(R.id.fragment_layout, searchBoxFragment).commit();
 
     }
 
-    @Override
-    public void onBackPressed(){
-        FragmentManager fm = getFragmentManager();
-        if (fm.getBackStackEntryCount() > 0) {
-            fm.popBackStack();
-        } else {
-            super.onBackPressed();
-        }
-    }
 
     @Override
     public void onSearchDone(String URLEnding) {
 
+
         URLEnding = URLEnding.trim();
         URLEnding = URLEnding.replace(" ", "+");
-        completeURL = URL_BEGINNING+URLEnding;
-        Log.v("URL", completeURL);
+        completeURL = URL_BEGINNING + URLEnding;
+        Log.v("SearchURL", completeURL);
         gson = new Gson();
 
         Ion.with(this).load(completeURL).progressBar(new ProgressBar(this)).asString().setCallback(new FutureCallback<String>() {
@@ -102,78 +93,56 @@ public class MainActivity extends FragmentActivity implements OnSearchPerformed,
                 if (response != null) {
 
                     hitsArrayList = (ArrayList<Hit>) response.getHits();
-                    resultArrayList = new ArrayList<>();
+                    titlesArrayList = new ArrayList<>();
+                    artistsArrayList = new ArrayList<>();
 
                     for (int i = 0; i < hitsArrayList.size(); i++) {
 
-                        resultArrayList.add(i, hitsArrayList.get(i).getResult().getPrimaryArtist().getName() +
-                                "-" + hitsArrayList.get(i).getResult().getTitle());
+                        artistsArrayList.add(i, hitsArrayList.get(i).getResult().getPrimaryArtist().getName());
+                        titlesArrayList.add(i, hitsArrayList.get(i).getResult().getTitle());
 
                     }
 
-                    if (fragmentArrayList.size() < 2){
+                    Bundle args = new Bundle();
 
-                        Bundle args = new Bundle();
-                        args.putStringArrayList("responseArrayList", resultArrayList);
+                    args.putStringArrayList("titlesArrayList", titlesArrayList);
+                    args.putStringArrayList("artistsArrayList", artistsArrayList);
 
-                        searchResultListFragment = new SearchResultListFragment();
-                        searchResultListFragment.setArguments(args);
-                        searchResultListFragment.setOnItemSelected(onItemSelected);
-                        myPagerAdapter.addFragment(searchResultListFragment);
+                    resultRecyclerViewFragment = new ResultRecyclerViewFragment();
+                    resultRecyclerViewFragment.setArguments(args);
+                    resultRecyclerViewFragment.setOnItemSelected(onItemSelected);
 
-                    }else{
 
-                        searchResultListFragment.changeListDisplayed(resultArrayList);
-
-                    }
-                    myViewPager.setCurrentItem(1);
-
+                    getFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.fragment_layout, resultRecyclerViewFragment).commit();
                 }
             }
         });
 
+    }
+
+    @Override
+    public void onItemSelection(String URL, String titleName, String artistName) {
+
+
+        Intent intent = new Intent(this, SongActivity.class);
+
+        intent.putExtra("URL", URL);
+        intent.putExtra("titleName", titleName);
+        intent.putExtra("artistName", artistName);
+
+        startActivity(intent);
 
 
     }
 
     @Override
-    public void onItemSelection(String URL, int positionClicked) {
+    public void onBackPressed() {
 
-        if (fragmentArrayList.size() < 3){
-            lyricsFragment = new LyricsFragment();
-            lyricsFragment.setOnExplanationAsked(onExplanationAsked);
-            Bundle bundle = new Bundle();
-            bundle.putString("URL", URL);
-            lyricsFragment.setArguments(bundle);
-            myPagerAdapter.addFragment(lyricsFragment);
-
-        }else{
-
-            if(!lyricsFragment.getURL().equals(URL))
-                lyricsFragment.setNewURL(URL);
-        }
-        myViewPager.setCurrentItem(2);
-
+        if (getFragmentManager().getBackStackEntryCount()!= 0)
+            getFragmentManager().popBackStack();
+        else
+            super.onBackPressed();
 
     }
 
-    @Override
-    public void onLyricsExplanationRequired(String URL) {
-
-        if (fragmentArrayList.size()<4){
-            explanationFragment = new ExplanationFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString("URL", URL);
-            explanationFragment.setArguments(bundle);
-            myPagerAdapter.addFragment(explanationFragment);
-
-        }else{
-
-            if(!explanationFragment.getURL().equals(URL))
-                explanationFragment.setNewURL(URL);
-        }
-
-        myViewPager.setCurrentItem(3);
-
-    }
 }

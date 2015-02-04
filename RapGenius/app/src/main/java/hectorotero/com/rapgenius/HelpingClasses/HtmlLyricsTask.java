@@ -22,7 +22,6 @@ public class HtmlLyricsTask extends GroundyTask{
     protected TaskResult doInBackground() {
 
         url = getStringArg("url");
-        Log.v("URL", url);
         try {
             document = Jsoup.connect(url).get();
 

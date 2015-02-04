@@ -5,6 +5,6 @@ package hectorotero.com.rapgenius.Interfaces;
  */
 public interface OnItemSelected {
 
-    public void onItemSelection(String URL, int positionClicked);
+    public void onItemSelection(String URL,  String titleName, String artistName);
 
 }

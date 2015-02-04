@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.text.Html;
 
+import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +17,8 @@ import com.telly.groundy.annotations.OnSuccess;
 import com.telly.groundy.annotations.Param;
 
 import hectorotero.com.rapgenius.HelpingClasses.HtmlExplanationTask;
-import hectorotero.com.rapgenius.HelpingClasses.HtmlLyricsTask;
-import hectorotero.com.rapgenius.Interfaces.OnExplanationAsked;
+
+import hectorotero.com.rapgenius.HelpingClasses.URLImageParser;
 import hectorotero.com.rapgenius.R;
 
 /**
@@ -34,11 +35,9 @@ public class ExplanationFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        if (completeView == null) {
-
-            completeView = inflater.inflate(R.layout.base_text_fragment, container, false);
+            completeView = inflater.inflate(R.layout.explanation_fragment, container, false);
+            wholeTextView = (ScrollView) completeView.findViewById(R.id.lyrics_scroll_view);
             progressView = completeView.findViewById(R.id.lyrics_progress_view);
-            wholeTextView = (ScrollView) completeView.findViewById(R.id.lyrics_view);
 
             textView = (TextView) completeView.findViewById(R.id.lyrics_text_view);
 
@@ -47,7 +46,7 @@ public class ExplanationFragment extends Fragment{
 
             Groundy.create(HtmlExplanationTask.class).callback(this).arg("url", getURL()).queueUsing(this.getActivity());
 
-        }
+
 
         return completeView;
     }
@@ -58,13 +57,22 @@ public class ExplanationFragment extends Fragment{
         progressView.setVisibility(View.GONE);
         wholeTextView.setVisibility(View.VISIBLE);
 
-        textView.setText(Html.fromHtml(html, new ResourceImageGetter(this.getActivity()), null));
+
+        URLImageParser urlImageParser = new URLImageParser(textView, this.getActivity());
+        Spanned spanned = Html.fromHtml(html, urlImageParser, null);
+        String string = spanned.toString();
+
+        int beginning_of_second_thing = string.indexOf("To help improve");
+
+        textView.setText(spanned.subSequence(0, beginning_of_second_thing));
         textView.setMovementMethod(LinkMovementMethod.getInstance());
 
     }
 
     public void setNewURL(String URL) {
 
+
+        progressView = completeView.findViewById(R.id.lyrics_progress_view);
         progressView.setVisibility(View.VISIBLE);
         wholeTextView.setVisibility(View.INVISIBLE);
         wholeTextView.scrollTo(0, 0);

@@ -9,8 +9,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import hectorotero.com.rapgenius.Interfaces.OnSearchPerformed;
 import hectorotero.com.rapgenius.R;
@@ -29,7 +27,7 @@ public class SearchBoxFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.search_fragment, container, false);
+        View view = inflater.inflate(R.layout.search_box_fragment, container, false);
 
         searchBarET = (EditText) view.findViewById(R.id.searchBar);
         searchBarET.setText("");
@@ -39,7 +37,7 @@ public class SearchBoxFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                if (searchBarET.getText().toString() != "") {
+                if (!searchBarET.getText().toString().equals("")) {
 
                     InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(searchBarET.getWindowToken(), 0);
